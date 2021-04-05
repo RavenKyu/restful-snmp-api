@@ -1,0 +1,272 @@
+--MIB { iso(1) org(3) dod(6) internet(1) private(4)
+-- enterprises(1) pwr(6375) }
+-- Date: 2017.07    Version 2.00
+--
+PWRMETER-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+        TRAP-TYPE
+                FROM RFC-1215
+        DisplayString
+                FROM RFC1213-MIB
+        OBJECT-TYPE
+                FROM RFC-1212
+        enterprises,
+        IpAddress
+                FROM RFC1155-SMI;
+
+
+pwrmeter OBJECT IDENTIFIER 
+   ::= { enterprises 6375 }
+
+dataview  OBJECT IDENTIFIER 
+   ::= {pwrmeter 1 }
+lim_set OBJECT IDENTIFIER 
+   ::= {pwrmeter 2 }
+sys_cfg OBJECT IDENTIFIER 
+   ::= {pwrmeter 3 }
+
+--------------------------------------------------------------------------------
+acvolt OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "ac_volt."
+   ::= {dataview 1 }
+
+acamp OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "ac_amp."
+   ::= {dataview 2 }
+
+acpf OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "ac_pf."
+   ::= {dataview 3 }
+
+acwatt OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "ac_watt."
+   ::= {dataview 4 }
+
+temper1 OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "temp1."
+   ::= {dataview 5 }
+
+temper2 OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "temp2."
+   ::= {dataview 6 }
+
+temper3_door OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "temp3_door."
+   ::= {dataview 7 }
+
+hum OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "hum."
+   ::= {dataview 8 }
+
+kwh OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS read-only
+        STATUS mandatory
+        DESCRIPTION "kwh."
+   ::= {dataview 9 }
+
+alarm OBJECT-TYPE
+	 SYNTAX INTEGER
+ --       SYNTAX INTEGER{
+ --             	temp1_low(1),  temp1_hi(2),
+--		temp2_low(3),  temp2_hi(4),
+--		temp3_low(5),  temp3_hi(6),
+--		door(7), unknown(8),
+--	amp_low(10), amp_hi(11),
+--		volt_low(12), volt_hi(13),
+--		buzzer(14), unknown(15)
+--	} 
+        ACCESS read-write
+        STATUS mandatory
+        DESCRIPTION "alarm."
+   ::= {dataview 10 }
+
+---------------------------------------------------------------------
+----------------------------------------------------------------------
+--lim_set
+slim_amp_hi OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_amp_hi."
+   ::= {lim_set 1 }
+slim_amp_low OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_amp_low."
+   ::= {lim_set 2 }
+
+slim_volt_hi OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_volt_hi."
+   ::= {lim_set 3 }
+slim_volt_low OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_volt_low."
+   ::= {lim_set 4 }
+
+slim_th1_hi OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper1_hi."
+   ::= {lim_set 5 }
+slim_th1_low OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper1_low."
+   ::= {lim_set 6 }
+
+slim_th2_hi OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper2_hi."
+   ::= {lim_set 7 }
+slim_th2_low OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper2_low."
+   ::= {lim_set 8 }
+
+slim_th3_hi OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper3_hi."
+   ::= {lim_set 9 }
+slim_th3_low OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "lim_temper3_low."
+   ::= {lim_set 10 }
+
+scfg_fnd OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "cfg_fnd."
+   ::= {lim_set 11 }
+scfg_tds OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "cfg_tds."
+   ::= {lim_set 12 }
+scfg_door OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "cfg_door."
+   ::= {lim_set 13 }
+
+-----------------------------------------------------------------------------------
+ip_set OBJECT-TYPE
+        SYNTAX IpAddress
+        ACCESS  read-write
+        STATUS mandatory
+        DESCRIPTION "The IP address of the manager to send a trap to."
+   ::= {sys_cfg 1 }
+ 
+----------------------------------------------------------------------------------
+
+
+
+--//////////////////////////////////////////////////////////////////////////////
+temper1_low TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper1_low  " 
+ ::= 1
+temper1_hi TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper1_hi  " 
+ ::= 2
+
+temper2_low TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper2_low  " 
+ ::= 3
+temper2_hi TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper2_hi  " 
+ ::= 4
+
+temper3_low TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper3_low  " 
+ ::= 5
+temper3_hi TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: temper3_hi  " 
+ ::= 6
+
+door_open TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: door_open  " 
+ ::= 7
+
+door_open TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "no-used  " 
+ ::= 8
+--
+amp_low TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm:amp_low  " 
+ ::= 9
+amp_hi TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: amp_hi  " 
+ ::= 10
+
+--
+volt_low TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: volt_low  " 
+ ::= 11
+volt3_hi TRAP-TYPE
+        ENTERPRISE pwrmeter
+        DESCRIPTION "amarm: volt_hi  " 
+ ::= 12
+
+
+
+--//////////////////////////////////////////////////////////////////////////////
+END
+
+ 
+
+

@@ -1,0 +1,64 @@
+---
+- schedule_name: test-1
+  template_version: 1
+  use: True
+  description: Test
+  setting:
+    type: tcp
+    comm:
+      host: 10.0.0.31
+      port: 161
+    community:
+      read: 'public'
+      write: 'private'
+    version: 2
+  trigger:
+    type: crontab
+    setting:
+      crontab: '*/3 * * * * *'  # every 3 seconds
+  default_template: template_for_scheduling
+  templates:
+    template_for_scheduling:
+      code: |
+        SENSOR_VALUE = [
+                'PDU2-MIB::externalSensorType',
+                'PDU2-MIB::measurementsExternalSensorState',
+                'PDU2-MIB::measurementsExternalSensorValue']
+
+        def main():
+            # oid, value, origin, scale, note
+            data = list()
+
+            oid = 'PDU2-MIB::pxIPAddress.1'
+            ok, values, message = snmp_get(f'-o {oid}')
+            if not ok:
+                raise
+            oid, value = values[0]
+            data.append({'key': oid, 'value': value})
+
+            ok, values, message = snmp_bulk('-o PDU2-MIB::measurementsExternalSensorValue.1')
+            for v in values:
+                oid, value = v
+                data.append({'key': oid, 'value': value})
+
+            ok, values, message = snmp_table(
+                '-o PDU2-MIB::measurementsExternalSensorValue '
+                '-o PDU2-MIB::measurementsExternalSensorState ')
+
+            for val in values:
+                _id = val.pop('id')
+                for oid, v in val.items():
+                    data.append({'key': f'{oid}.{_id}', 'value': v})
+
+            #ok, values, message = snmp_set('PDU2-MIB::externalSensorName.1.10 "Door Handle Lock 3" string')
+            #print(ok, values, message)
+            return data
+
+      template:
+        - key: pxIPAddress.1
+          note: IP Address
+          scale:
+
+        - key: PDU2-MIB::measurementsExternalSensorValue.1.1.1
+          note: IP Address
+          scale: 0.1

@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  restful-snmp-api:
+    image: restful-snmp-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: restful-modbus-api
+
+
+
