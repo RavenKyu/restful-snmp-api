@@ -134,16 +134,14 @@ def get_json_data_with_template(data: list, template):
         note = None
         try:
             t = next(x for x in template if x['key'] == d['key'])
-            if 'scale' in t and t['scale']:
-                value = int(d['value']) * t['scale']
-
-            scale = t['scale']
-            note = t['note']
 
             # converting type
             if 'type' in t and t['type']:
                 try:
                     raw, value = convert_type(d['value'], t['type'])
+                    if 'scale' in t and t['scale']:
+                        value = value * t['scale']
+                        scale = t['scale']
                 except TypeError as e:
                     logger.warning(f"{d['key']}: {str(e)}")
                 except ValueError as e:
@@ -151,6 +149,7 @@ def get_json_data_with_template(data: list, template):
                         f"{d['key']}: failed to convert the value - "
                         f"data: {raw} -> {t['type']}")
 
+            note = t['note']
         except StopIteration:
             pass
 
