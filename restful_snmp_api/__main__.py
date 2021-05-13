@@ -3,9 +3,6 @@ import yaml
 import pathlib
 from restful_snmp_api.app import app
 from restful_snmp_api.app import collector
-from restful_snmp_api.utils.logger import get_logger
-
-logger = get_logger(__package__)
 
 MIB_DIRECTORY = pathlib.Path.home() / pathlib.Path('.snmp/mibs')
 
@@ -39,10 +36,10 @@ def main():
                 raise FileNotFoundError(f'{t} is not existed.')
             target = (MIB_DIRECTORY / source.name)
             if target.exists():
-                logger.warning(
+                logging.warning(
                     f'{source.name} is already existed in {MIB_DIRECTORY}.')
             target.write_text(source.read_text())  # for text files
-            logger.info(f'{source.name} is copied to {MIB_DIRECTORY}.')
+            logging.info(f'{source.name} is copied to {MIB_DIRECTORY}.')
 
     app.run(host=argspec.address,
             port=argspec.port,

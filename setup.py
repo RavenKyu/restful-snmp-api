@@ -27,10 +27,14 @@ setup(
         'easysnmp==0.2.5'
     ],
     tests_require=tests_require,
+    package_dir={"restful_snmp_api": "restful_snmp_api"},
     packages=find_packages(
-        exclude=['dummy-snmp-server', 'dummy-snmp-server.*',
-                 'tests', 'tests.*']),
-    package_data={},
+        where='.',
+        include=['restful_snmp_api',
+                 'restful_snmp_api.*'],
+        exclude=['dummy-*', 'tests', 'tests.*']),
+    package_data={
+        "": ["*.cfg"]},
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
