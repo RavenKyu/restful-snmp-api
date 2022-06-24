@@ -140,5 +140,6 @@ cython_debug/
 .ash_history
 
 .idea/
+*.log.[0-9]
 
 .python-version
