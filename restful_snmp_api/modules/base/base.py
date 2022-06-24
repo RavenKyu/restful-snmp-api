@@ -4,9 +4,6 @@ from flask import jsonify
 from flask import render_template
 from restful_snmp_api.modules.api import CustomBlueprint
 from restful_snmp_api.modules.api.v1.api import schedules as api_schedules
-from restful_snmp_api.utils.logger import get_logger
-
-logger = get_logger('module-schedules')
 
 bp = CustomBlueprint('schedules', __name__,
                      template_folder='templates',
@@ -16,7 +13,6 @@ bp = CustomBlueprint('schedules', __name__,
 @bp.route('/', methods=('GET', 'POST'))
 def schedules():
     if request.method == 'GET':
-        logger.info('get called')
         collector = bp.gv['collector']
         a : Response= api_schedules()
         print(a.status_code)

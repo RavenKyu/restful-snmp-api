@@ -1,11 +1,5 @@
 FROM python:3.8.6-alpine3.12
 
-# ==============================================================================
-# 타임존 설정
-RUN apk add tzdata && \
-    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
-    echo "Asia/Seoul" > /etc/timezone
-
 ENV PYTHONUNBUFFERED=0
 
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev
@@ -29,6 +23,10 @@ RUN python setup.py install
 WORKDIR /root
 RUN rm -rf /src
 RUN apk del .build-deps
+
+# =============================================================================
+# 로그파일 위치 생성
+RUN mkdir -p /var/log/app
 
 EXPOSE 5000
 

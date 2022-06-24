@@ -1,17 +1,15 @@
 import flask
+import logging
 import operator
 from flask import request, abort, make_response
 from flask import jsonify, redirect, url_for
 from functools import wraps
 from restful_snmp_api.modules.api import CustomBlueprint
-from restful_snmp_api.utils.logger import get_logger
 
 from restful_snmp_api.manager import (
     ExceptionResponse,
     ExceptionScheduleReduplicated,
     NotFound)
-
-logger = get_logger('api-v1')
 
 bp = CustomBlueprint('api', __name__)
 
@@ -34,7 +32,7 @@ def result(f):
         except NotFound as e:
             return custom_error(str(e), 404)
         except Exception as e:
-            logger.exception(msg=str(e), exc_info=e)
+            bp.logger.exception(msg=str(e), exc_info=e)
             raise
     return func
 
@@ -136,7 +134,7 @@ def schedule_template_on_demend_run(schedule_name, template_name):
     if request.method == 'POST':
         query = request.args.to_dict()
         arguments = request.get_json(force=True)
-        logger.info(arguments)
+        bp.logger.info(arguments)
         collector = bp.gv['collector']
         template = collector.execute_script_after_finishing(
             schedule_name, template_name, **arguments)

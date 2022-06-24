@@ -1,7 +1,7 @@
+import logging
 from easysnmp import Session
 from functools import wraps
 from easysnmp import snmp_get, snmp_set, snmp_walk
-from restful_snmp_api.utils.logger import get_logger
 
 
 ################################################################################
@@ -11,7 +11,6 @@ class SnmpHandler:
                  community_write='private', version=2):
         self.host = host
         self.port = port
-        self.logger = get_logger('snmp-handler')
         self.address = (host, port)
         self.community_read = community_read
         self.community_write = community_write
@@ -21,15 +20,14 @@ class SnmpHandler:
     def result(self):
         @wraps(self)
         def func(*args, **kwargs):
-            this = args[0]
             try:
                 result = self(*args, **kwargs)
                 ok, value, message = (True, result, '')
             except Exception as e:
-                this.logger.exception(msg=str(e), exc_info=e)
+                logging.exception(msg=str(e), exc_info=e)
                 ok, value, message = (False, None, str(e))
             if not ok:
-                this.logger.error(f'code: {ok} message: {message}')
+                logging.error(f'code: {ok} message: {message}')
             return ok, value, message
 
         return func

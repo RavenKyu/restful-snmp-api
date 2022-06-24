@@ -19,15 +19,14 @@
   templates:
     template_for_scheduling:
       code: |
-        from restful_snmp_api.utils.logger import get_logger
-        logger = get_logger('pwrmeter')
+        import logging
 
         def main():
             data = list()
             oid = '.1.3.6.1.4.1.6375.1'
             ok, values, message = snmp_bulk(f'-o {oid}')
             if not ok:
-                logger.warning("not ok")
+                logging.warning("not ok")
                 return list()
             for i, v in enumerate(values, 1):
                 oid, value = v

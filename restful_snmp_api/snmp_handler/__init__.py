@@ -1,13 +1,12 @@
+import logging
 import datetime
 import functools
 import shlex
 
 from restful_snmp_api.snmp_handler.handler import SnmpHandler
-from restful_snmp_api.utils.logger import get_logger
 from restful_snmp_api.snmp_handler.arugment_parser import \
     argument_parser
 
-logger = get_logger('snmp-handler')
 
 
 ###############################################################################
@@ -143,9 +142,9 @@ def get_json_data_with_template(data: list, template):
                         value = value * t['scale']
                         scale = t['scale']
                 except TypeError as e:
-                    logger.warning(f"{d['key']}: {str(e)}")
+                    logging.warning(f"{d['key']}: {str(e)}")
                 except ValueError as e:
-                    logger.warning(
+                    logging.warning(
                         f"{d['key']}: failed to convert the value - "
                         f"data: {raw} -> {t['type']}")
 
@@ -154,7 +153,7 @@ def get_json_data_with_template(data: list, template):
             pass
 
         if d['key'] in result['data']:
-            logger.warning(f'There is already duplicated name, {d["key"]}')
+            logging.warning(f'There is already duplicated name, {d["key"]}')
         result['data'][d['key']] = {
             'raw': raw, 'value': value, 'scale': scale,
             'note': note
